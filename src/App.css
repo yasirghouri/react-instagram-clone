@@ -1,3 +1,12 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+}
+.app {
+  background-color: #fafafa;
+}
+.app__header {
+  background-color: white;
+  object-fit: contain;
+  border-bottom: 1px solid lightgray;
+  padding: 20px;
 }
