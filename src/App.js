@@ -175,6 +175,7 @@ const App = () => {
             return (
               <Post
                 postId={id}
+                user={user}
                 username={post.username}
                 imageURL={post.imageURL}
                 caption={post.caption}
