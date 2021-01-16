@@ -197,7 +197,7 @@ const App = () => {
         </div>
       </div>
 
-      {user?.displayName ? <ImageUpload username={user.displayName} /> : null}
+      {user && <ImageUpload username={user.displayName} />}
     </div>
   );
 };
