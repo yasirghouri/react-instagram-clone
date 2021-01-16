@@ -9,6 +9,23 @@
   object-fit: contain;
   border-bottom: 1px solid lightgray;
   padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.app__headerImage {
+  object-fit: contain;
+}
+.app__posts {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.app__postsLeft {
+  flex: 1;
+}
+.app__postsRight {
+  margin-left: 20px;
+  flex: 1;
 }
 .app__signup {
   display: flex;

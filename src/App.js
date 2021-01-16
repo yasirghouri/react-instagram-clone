@@ -4,6 +4,7 @@ import { Button, Input, Modal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Post from "./components/Post/Post";
 import { db, auth } from "./firebase";
+import ImageUpload from "./components/ImageUpload/ImageUpload";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,14 +55,16 @@ const App = () => {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          post: doc.data(),
-        }))
-      );
-    });
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            post: doc.data(),
+          }))
+        );
+      });
   }, []);
 
   const signupHandler = (e) => {
@@ -157,26 +160,43 @@ const App = () => {
           alt="instagram logo"
           className="app__headerImage"
         />
+        {user ? (
+          <Button onClick={() => auth.signOut()}>Log Out</Button>
+        ) : (
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Log Out</Button>
-      ) : (
-        <div className="app__loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+      <div className="app__posts">
+        <div className="app__postsLeft">
+          {posts.map(({ post, id }) => {
+            return (
+              <Post
+                postId={id}
+                username={post.username}
+                imageURL={post.imageURL}
+                caption={post.caption}
+                key={id}
+              />
+            );
+          })}
         </div>
-      )}
+        <div className="app__postsRight">
+          <div>
+            {user?.displayName ? <h2>{user.displayName}</h2> : null}
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad nulla
+              ducimus voluptatum laborum quis, et vel nihil nobis natus in harum
+              tempora voluptatibus possimus, eius officia rem. Officia,
+              blanditiis in!
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {posts.map(({ post, id }) => {
-        return (
-          <Post
-            username={post.username}
-            imageURL={post.imageURL}
-            caption={post.caption}
-            key={id}
-          />
-        );
-      })}
+      {user?.displayName ? <ImageUpload username={user.displayName} /> : null}
     </div>
   );
 };
